@@ -1,2 +1,2 @@
-# work
-Генератор автоматического отчета о проведенных indoor измерениях
+# WB_parser
+Getting the position of the product on WB
