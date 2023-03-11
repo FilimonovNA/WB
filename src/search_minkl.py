@@ -1,4 +1,4 @@
-# request_fowmat https://search.wb.ru/exactmatch/ru/female/v4/search?appType=1&couponsGeo=2,12,3,18,15,21&curr=rub&dest=-1029256,-51490,-173406,123585734&emp=0&lang=ru&locale=ru&pricemarginCoeff=1.0&query=%D1%81%D1%83%D0%BC%D0%BA%D0%B0%20%D0%B6%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F&reg=1&regions=68,64,83,4,38,80,33,70,82,86,75,30,69,1,48,22,66,31,40,71&resultset=catalog&sort=popular&spp=27&suppressSpellcheck=false
+# request_format https://search.wb.ru/exactmatch/ru/female/v4/search?appType=1&couponsGeo=2,12,3,18,15,21&curr=rub&dest=-1029256,-51490,-173406,123585734&emp=0&lang=ru&locale=ru&pricemarginCoeff=1.0&query=%D1%81%D1%83%D0%BC%D0%BA%D0%B0%20%D0%B6%D0%B5%D0%BD%D1%81%D0%BA%D0%B0%D1%8F&reg=1&regions=68,64,83,4,38,80,33,70,82,86,75,30,69,1,48,22,66,31,40,71&resultset=catalog&sort=popular&spp=27&suppressSpellcheck=false
 
 import requests
 import json
@@ -6,9 +6,10 @@ import pandas as pd
 import datetime
 
 MAX_PAGE_NUMBER = 100
-MINKL_ID = 102398584
+MINKL_ID = 142400300
 FILE_NAME = "data.json"
 MAX_PAGE = 60           # Default the maximum number of pages is 60
+
 
 def get_user_request():
     request = input("Enter user request: ")
@@ -16,8 +17,13 @@ def get_user_request():
 
 
 def clear_file():
+
     with open('data.json', 'w') as f:
         pass
+
+
+def get_item_id():
+    item_id = int(input("Enter item id: "))
 
 
 def get_data_from_one_page(user_request="сумка", page_number=1):
@@ -108,7 +114,7 @@ else:
                  f'_______________________________________\n\n'
 
 
-log_file = open('log.txt', 'a', encoding='cp1251')
+log_file = open('log.txt', 'a', encoding='UTF-8')
 log_file.write(str(datetime.datetime.now()) + '\n')
 log_file.write("Всего страниц: " + str(MAX_PAGE) + '\n')
 log_file.write(log_string)
