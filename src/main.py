@@ -1,5 +1,5 @@
 from get_external import InfoImport
-from wb_parser import Request, WBParser
+from wb_parser import Request, WBParser, Mode
 from constants import *
 import os
 import time
@@ -64,7 +64,6 @@ def get_page(position):
 
 
 def mode_1(usr):
-    clear_terminal()
     print('It\'s mode_1')
     item_id = usr.get_item_id()
     if item_id == 0:
@@ -80,7 +79,7 @@ def mode_1(usr):
 def mode_2(usr):
     print('It\'s mode_2')
     if isinstance(usr.item_id, int) or isinstance(usr.item_id, str) or usr.item_id is None:
-        items_id = usr.get_items()
+        usr.get_items()
     print(usr.item_id)
     if len(usr.item_id) == 0:
         print('Нет значений в файле Items.txt')
@@ -106,29 +105,34 @@ def mode_3(usr):
         return 0
     positions = get_all_requests_positions(item_id, requests)
     for position in positions:
-        try:
-            page = int(position / 100) + 1
-        except TypeError:
-            page = None
+        page = get_page(position)
         print(f'position={position}, page = {page}')
 
 
-def mode_4():
+def mode_4(usr):
     print('It\'s mode_4')
+    items_id = usr.get_items()
+    requests = usr.get_common_requests_list()
+    for item in items_id:
+        positions = get_all_requests_positions(item, requests)
+        for position in positions:
+            page = get_page(position)
+            print(f'item_id = {item}, position={position}, page = {page}')
 
 
 def main():
-    usr = InfoImport()
+    usr = Mode()
     usr.select_mode()
     while usr.mode != 0:
         if usr.mode == 1:
             mode_1(usr)
+            #usr.mode_1()
         elif usr.mode == 2:
             mode_2(usr)
         elif usr.mode == 3:
             mode_3(usr)
         elif usr.mode == 4:
-            mode_4()
+            mode_4(usr)
         usr.select_mode()
 
 
