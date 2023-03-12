@@ -1,10 +1,9 @@
 import os
-from constants import *
 
 
 class InfoImport:
 
-    def __init__(self): #, item_id=DEFAULT_ITEM_ID, user_request=None, user_requests_list=None):
+    def __init__(self):
         self.mode = 1
         self.item_id = None
         self.user_request = None
@@ -43,10 +42,10 @@ class InfoImport:
     def get_items(self):
         self.item_id = []
         current_dir = os.getcwd()
-        print(current_dir)
         os.chdir('..')  # поднимаемся на одну ступень выше
         path = f'user_requests/items.txt'
         if not os.path.isfile(path):
+            os.chdir(current_dir)
             return 1
         with open(path, "r") as file:
             self.item_id = [x for x in file.readlines()]
@@ -63,28 +62,33 @@ class InfoImport:
         return self.item_id
 
     def get_user_requests_list(self):
-        #os.getcwd()
-        os.chdir('..')      # поднимаемся на одну ступень выше
+        current_dir = os.getcwd()
+        os.chdir('..')  # поднимаемся на одну ступень выше
         path = f'user_requests/{self.item_id}.txt'
         if not os.path.isfile(path):
+            os.chdir(current_dir)
             return 1
         self.user_requests_list = []
         with open(path, "r") as file:
             for line in file.readlines():
                 self.user_requests_list.append(line.replace(" ", "+").replace("\n", ""))
+        os.chdir(current_dir)
         if len(self.user_requests_list) > 0:
             return self.user_requests_list
         return 1
 
     def get_common_requests_list(self):
-        os.chdir('..')      # поднимаемся на одну ступень выше
+        current_dir = os.getcwd()
+        os.chdir('..')  # поднимаемся на одну ступень выше
         path = f'user_requests/common.txt'
         if not os.path.isfile(path):
+            os.chdir(current_dir)
             return 1
         self.user_requests_list = []
         with open(path, "r") as file:
             for line in file.readlines():
                 self.user_requests_list.append(line.replace(" ", "+").replace("\n", ""))
+        os.chdir(current_dir)
         if len(self.user_requests_list) > 0:
             return self.user_requests_list
         return 1

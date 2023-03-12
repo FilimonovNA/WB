@@ -1,8 +1,8 @@
-from get_external import InfoImport
 from wb_parser import Request, WBParser, Mode
 from constants import *
 import os
 import time
+from datetime import datetime
 
 
 # user = InfoImport()
@@ -107,6 +107,8 @@ def mode_3(usr):
     for position in positions:
         page = get_page(position)
         print(f'position={position}, page = {page}')
+    save_file(item_id, positions)
+    return 0
 
 
 def mode_4(usr):
@@ -118,6 +120,20 @@ def mode_4(usr):
         for position in positions:
             page = get_page(position)
             print(f'item_id = {item}, position={position}, page = {page}')
+        save_file(items_id, positions)
+    return 0
+
+
+def save_file(file_name, data):
+    current_dir = os.getcwd()
+    os.chdir('..')  # поднимаемся на одну ступень выше
+    path = f'responses/{file_name}.txt'
+    dt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    with open(path, 'w') as file:
+        file.write(str(dt)+'\n')
+        for one_pos in data:
+            file.write(str(one_pos)+'\n')
+    os.chdir(current_dir)
 
 
 def main():
@@ -126,7 +142,6 @@ def main():
     while usr.mode != 0:
         if usr.mode == 1:
             mode_1(usr)
-            #usr.mode_1()
         elif usr.mode == 2:
             mode_2(usr)
         elif usr.mode == 3:
