@@ -40,6 +40,28 @@ class InfoImport:
         except ValueError:
             return 1
 
+    def get_items(self):
+        self.item_id = []
+        current_dir = os.getcwd()
+        print(current_dir)
+        os.chdir('..')  # поднимаемся на одну ступень выше
+        path = f'user_requests/items.txt'
+        if not os.path.isfile(path):
+            return 1
+        with open(path, "r") as file:
+            self.item_id = [x for x in file.readlines()]
+
+        os.chdir(current_dir)
+        items = []
+        for item in self.item_id:
+            try:
+                items.append(int(item))
+            except ValueError:
+                pass
+
+        self.item_id = items
+        return self.item_id
+
     def get_user_requests_list(self):
         #os.getcwd()
         os.chdir('..')      # поднимаемся на одну ступень выше

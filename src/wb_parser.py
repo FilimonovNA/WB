@@ -20,11 +20,12 @@ class Request:
 
     def get_data(self):
         response = requests.get(self.request, headers=HEADER)
-        data = response.json()
-        if response.status_code == 200 and len(data) == 5:
-            return data
-        else:
-            return None
+        if response.status_code == 200:
+            data = response.json()
+            if len(data) == 5:
+                return data
+            else:
+                return None
 
 
 class WBParser:
