@@ -3,3 +3,4 @@ token.txt
 src/__pycache__/
 result.txt
 .idea/
+.DS_Store
