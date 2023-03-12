@@ -104,9 +104,11 @@ def mode_3(usr):
     if requests == 1:
         return 0
     positions = get_all_requests_positions(item_id, requests)
+    i = 0
     for position in positions:
         page = get_page(position)
-        print(f'position={position}, page = {page}')
+        print(f'request = {requests[i]}, position={position}, page = {page}')
+        i += 1
     save_file(item_id, positions)
     return 0
 
@@ -117,10 +119,12 @@ def mode_4(usr):
     requests = usr.get_common_requests_list()
     for item in items_id:
         positions = get_all_requests_positions(item, requests)
+        i = 0
         for position in positions:
             page = get_page(position)
-            print(f'item_id = {item}, position={position}, page = {page}')
-        save_file(items_id, positions)
+            print(f'item_id = {item}, request = {requests[i]}, position={position}, page = {page}')
+            i += 1
+        save_file(item, positions)
     return 0
 
 
@@ -132,7 +136,8 @@ def save_file(file_name, data):
     with open(path, 'w') as file:
         file.write(str(dt)+'\n')
         for one_pos in data:
-            file.write(str(one_pos)+'\n')
+            page = get_page(one_pos)
+            file.write(f'{one_pos}({page})\n')
     os.chdir(current_dir)
 
 

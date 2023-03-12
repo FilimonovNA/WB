@@ -69,7 +69,7 @@ class InfoImport:
             os.chdir(current_dir)
             return 1
         self.user_requests_list = []
-        with open(path, "r") as file:
+        with open(path, "r", encoding='utf-8') as file:
             for line in file.readlines():
                 self.user_requests_list.append(line.replace(" ", "+").replace("\n", ""))
         os.chdir(current_dir)
@@ -85,7 +85,7 @@ class InfoImport:
             os.chdir(current_dir)
             return 1
         self.user_requests_list = []
-        with open(path, "r") as file:
+        with open(path, "r", encoding='utf-8') as file:
             for line in file.readlines():
                 self.user_requests_list.append(line.replace(" ", "+").replace("\n", ""))
         os.chdir(current_dir)
