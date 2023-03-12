@@ -3,7 +3,7 @@ from constants import *
 import os
 import time
 from datetime import datetime
-
+from db_class import PositionsDB
 
 # user = InfoImport()
 # info.get_user_request()
@@ -14,6 +14,10 @@ from datetime import datetime
 #         r = Request(DEFAULT_ITEM_ID, request_text, current_page).get_request()
 #         #d = r.get_data()
 #         print(r.request)
+
+row_db = {'date': None, 'item_ID': None, 'request': None, 'position': None}
+
+
 def wait():
     print('Ждем 20 сек, т.к. превышено количество запросов')
     for i in range(20):
@@ -63,7 +67,7 @@ def get_page(position):
         return None
 
 
-def mode_1(usr):
+def mode_1(usr, db):
     print('It\'s mode_1')
     item_id = usr.get_item_id()
     if item_id == 0:
@@ -73,10 +77,13 @@ def mode_1(usr):
         return 0
     position = get_all_requests_positions(item_id, request)
     page = get_page(position)
+    date = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
+    update_dict(date, item_id, request, position)
     print(f'item_id = {item_id}, request = {request}, position = {position}, page = {page}\n')
+    db.insert_row(row_db)
 
 
-def mode_2(usr):
+def mode_2(usr, db):
     print('It\'s mode_2')
     if isinstance(usr.item_id, int) or isinstance(usr.item_id, str) or usr.item_id is None:
         usr.get_items()
@@ -92,10 +99,13 @@ def mode_2(usr):
         position = get_one_request_position(item, request)
         page = get_page(position)
         positions.update({item: position})
+        date = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
+        update_dict(date, item, request, position)
         print(f'item_id = {item}, request = {request}, position = {position}, page = {page}\n')
+        db.insert_row(row_db)
 
 
-def mode_3(usr):
+def mode_3(usr, db):
     print('It\'s mode_3')
     item_id = usr.get_item_id()
     if item_id == 1:
@@ -107,13 +117,16 @@ def mode_3(usr):
     i = 0
     for position in positions:
         page = get_page(position)
+        date = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
+        update_dict(date, item_id, requests[i], position)
         print(f'request = {requests[i]}, position={position}, page = {page}')
+        db.insert_row(row_db)
         i += 1
     save_file(item_id, positions)
     return 0
 
 
-def mode_4(usr):
+def mode_4(usr, db):
     print('It\'s mode_4')
     items_id = usr.get_items()
     requests = usr.get_common_requests_list()
@@ -122,7 +135,10 @@ def mode_4(usr):
         i = 0
         for position in positions:
             page = get_page(position)
+            date = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
+            update_dict(date, item, requests[i], position)
             print(f'item_id = {item}, request = {requests[i]}, position={position}, page = {page}')
+            db.insert_row(row_db)
             i += 1
         save_file(item, positions)
     return 0
@@ -141,19 +157,29 @@ def save_file(file_name, data):
     os.chdir(current_dir)
 
 
+def update_dict(date, item_ID, request, position):
+    if position is None:
+        position = 'NULL'
+    request = request.replace('+', ' ')
+    row_db.update({'date': date, 'item_ID': item_ID, 'request': request, 'position': position})
+
+
 def main():
     usr = Mode()
     usr.select_mode()
+    db = PositionsDB().create_db()
+
     while usr.mode != 0:
         if usr.mode == 1:
-            mode_1(usr)
+            mode_1(usr, db)
         elif usr.mode == 2:
-            mode_2(usr)
+            mode_2(usr, db)
         elif usr.mode == 3:
-            mode_3(usr)
+            mode_3(usr, db)
         elif usr.mode == 4:
-            mode_4(usr)
+            mode_4(usr, db)
         usr.select_mode()
+    db.disconnect()
 
 
 main()
