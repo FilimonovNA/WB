@@ -178,6 +178,9 @@ def main():
         elif usr.mode == 4:
             mode_4(usr, db)
         usr.select_mode()
+
+    db.select_all()
+    db.commit()
     db.disconnect()
 
 
