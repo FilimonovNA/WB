@@ -18,7 +18,8 @@ class PositionsDB:
         query = f"""
                 CREATE TABLE IF NOT EXISTS Positions
                 (
-                date TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY,
+                date TEXT,
                 item_ID INTEGER,
                 request TEXT,
                 item_position INTEGER
@@ -35,12 +36,14 @@ class PositionsDB:
         return result
 
     def insert_row(self, data_dict: dict):
-        query = f""" INSERT INTO Positions (date, item_ID, request, item_position)
+        query = f""" INSERT OR REPLACE INTO Positions (date, item_ID, request, item_position)
                 VALUES ('{data_dict.get('date')}', {data_dict.get('item_ID')}, 
                         '{data_dict.get('request')}', {data_dict.get('position')})
                 """
         self.cursor.execute(query)
 
-    def disconnect(self):
+    def commit(self):
         self.connect.commit()
+
+    def disconnect(self):
         self.connect.close()

@@ -15,8 +15,6 @@ from db_class import PositionsDB
 #         #d = r.get_data()
 #         print(r.request)
 
-row_db = {'date': None, 'item_ID': None, 'request': None, 'position': None}
-
 
 def wait():
     print('Ждем 20 сек, т.к. превышено количество запросов')
@@ -77,8 +75,8 @@ def mode_1(usr, db):
         return 0
     position = get_all_requests_positions(item_id, request)
     page = get_page(position)
-    date = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
-    update_dict(date, item_id, request, position)
+    date = datetime.now().strftime("%d:%m:%Y")
+    row_db = update_dict(date, item_id, request, position)
     print(f'item_id = {item_id}, request = {request}, position = {position}, page = {page}\n')
     db.insert_row(row_db)
 
@@ -99,8 +97,8 @@ def mode_2(usr, db):
         position = get_one_request_position(item, request)
         page = get_page(position)
         positions.update({item: position})
-        date = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
-        update_dict(date, item, request, position)
+        date = datetime.now().strftime("%d:%m:%Y")
+        row_db = update_dict(date, item, request, position)
         print(f'item_id = {item}, request = {request}, position = {position}, page = {page}\n')
         db.insert_row(row_db)
 
@@ -117,8 +115,8 @@ def mode_3(usr, db):
     i = 0
     for position in positions:
         page = get_page(position)
-        date = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
-        update_dict(date, item_id, requests[i], position)
+        date = datetime.now().strftime("%d:%m:%Y")
+        row_db = update_dict(date, item_id, requests[i], position)
         print(f'request = {requests[i]}, position={position}, page = {page}')
         db.insert_row(row_db)
         i += 1
@@ -135,8 +133,8 @@ def mode_4(usr, db):
         i = 0
         for position in positions:
             page = get_page(position)
-            date = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
-            update_dict(date, item, requests[i], position)
+            date = datetime.now().strftime("%d:%m:%Y")
+            row_db = update_dict(date, item, requests[i], position)
             print(f'item_id = {item}, request = {requests[i]}, position={position}, page = {page}')
             db.insert_row(row_db)
             i += 1
@@ -148,7 +146,7 @@ def save_file(file_name, data):
     current_dir = os.getcwd()
     os.chdir('..')  # поднимаемся на одну ступень выше
     path = f'responses/{file_name}.txt'
-    dt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    dt = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
     with open(path, 'w') as file:
         file.write(str(dt)+'\n')
         for one_pos in data:
@@ -161,8 +159,9 @@ def update_dict(date, item_ID, request, position):
     if position is None:
         position = 'NULL'
     request = request.replace('+', ' ')
-    row_db.update({'date': date, 'item_ID': item_ID, 'request': request, 'position': position})
-
+    row_db = {'date': date, 'item_ID': item_ID, 'request': request, 'position': position}
+    #row_db.update({'date': date, 'item_ID': item_ID, 'request': request, 'position': position})
+    return row_db
 
 def main():
     usr = Mode()
