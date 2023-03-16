@@ -41,16 +41,12 @@ class InfoImport:
 
     def get_items(self):
         self.item_id = []
-        current_dir = os.getcwd()
-        os.chdir('..')  # поднимаемся на одну ступень выше
         path = f'user_requests/items.txt'
         if not os.path.isfile(path):
-            os.chdir(current_dir)
             return 1
         with open(path, "r") as file:
             self.item_id = [x for x in file.readlines()]
 
-        os.chdir(current_dir)
         items = []
         for item in self.item_id:
             try:
@@ -62,33 +58,25 @@ class InfoImport:
         return self.item_id
 
     def get_user_requests_list(self):
-        current_dir = os.getcwd()
-        os.chdir('..')  # поднимаемся на одну ступень выше
         path = f'user_requests/{self.item_id}.txt'
         if not os.path.isfile(path):
-            os.chdir(current_dir)
             return 1
         self.user_requests_list = []
         with open(path, "r", encoding='utf-8') as file:
             for line in file.readlines():
                 self.user_requests_list.append(line.replace(" ", "+").replace("\n", ""))
-        os.chdir(current_dir)
         if len(self.user_requests_list) > 0:
             return self.user_requests_list
         return 1
 
     def get_common_requests_list(self):
-        current_dir = os.getcwd()
-        os.chdir('..')  # поднимаемся на одну ступень выше
         path = f'user_requests/common.txt'
         if not os.path.isfile(path):
-            os.chdir(current_dir)
             return 1
         self.user_requests_list = []
         with open(path, "r", encoding='utf-8') as file:
             for line in file.readlines():
                 self.user_requests_list.append(line.replace(" ", "+").replace("\n", ""))
-        os.chdir(current_dir)
         if len(self.user_requests_list) > 0:
             return self.user_requests_list
         return 1

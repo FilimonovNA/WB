@@ -143,8 +143,6 @@ def mode_4(usr, db):
 
 
 def save_file(file_name, data):
-    current_dir = os.getcwd()
-    os.chdir('..')  # поднимаемся на одну ступень выше
     path = f'responses/{file_name}.txt'
     dt = datetime.now().strftime("%d:%m:%Y %H:%M:%S")
     with open(path, 'w') as file:
@@ -152,7 +150,6 @@ def save_file(file_name, data):
         for one_pos in data:
             page = get_page(one_pos)
             file.write(f'{one_pos}({page})\n')
-    os.chdir(current_dir)
 
 
 def update_dict(date, item_ID, request, position):
@@ -179,7 +176,6 @@ def main():
             mode_4(usr, db)
         usr.select_mode()
 
-    db.select_all()
     db.commit()
     db.disconnect()
 

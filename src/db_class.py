@@ -5,16 +5,11 @@ import os
 class PositionsDB:
 
     def __init__(self):
-        current_dir = os.getcwd()
-        os.chdir('..')
         self.db_path = 'db/positions.db'
         self.connect = sqlite3.connect(self.db_path)
         self.cursor = self.connect.cursor()
-        os.chdir(current_dir)
 
     def create_db(self):
-        current_dir = os.getcwd()
-        os.chdir('..')
         query = f"""
                 CREATE TABLE IF NOT EXISTS Positions
                 (
@@ -26,7 +21,6 @@ class PositionsDB:
                 )
                 """
         self.cursor.execute(query)
-        os.chdir(current_dir)
         return self
 
     def select_all(self):
